@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSS Grid Template- Nested elements</title>
+        <style>
+            .wrapper{
+                display:grid;
+                grid-template-columns: repeat(3,1fr);
+                grid-gap:1em;
+                grid-auto-rows: minmax(100px,auto);
+            }
+
+            .wrapper>div:nth-child(odd){
+                background:#AFFDFD;
+            }
+            .wrapper>div {
+                background:#94eeee;
+            }
+
+            .nested {
+                display:grid;
+                grid-template-columns:repeat(4,1fr);
+                grid-gap:1em;
+                grid-auto-rows: 70px;
+            }
+            .nested > div{
+                border:#000  1px solid;
+                padding:1em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div>Lorem, ipsum dolor.</div>
+            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus eius vel saepe dignissimos atque sed reprehenderit quam totam adipisci at odit illum repellat error harum ex hic, voluptatibus ipsam quis.</div>
+            <div class="nested">
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+                <div>Lorem, ipsum dolor.</div>
+
+            </div>
+            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
+            <div>Lorem ipsum, dolor sit amet consectetur adipisicing.</div>
+            <div>Lorem ipsum dolor sit.</div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSS Grid Template - Justify Items</title>
+        <style>
+            .wrapper{
+                display:grid;
+                grid-template-columns: 1fr 2fr 1fr;
+                grid-auto-rows: minmax(70px,auto);
+                grid-gap:1em;
+                /*justify-items: end; /*justify-items =[start ,end,center,stretch]*/
+               /* align-items: stretch; /*justify with align-items*/
+            }
+            .wrapper >div:nth-child(odd){
+                background:#eee;
+
+            }
+            .wrapper>div{
+                background: #ddd;
+            }
+            /* align-center,justify-items,align-self,justify-self are attributes for alignment of element and */
+            /* values can be start , end , center , stretch*/
+            .box1{
+               /* align-self:start;*/
+               grid-column: 1/3;
+               grid-row:1/3
+            }
+            .box2{
+                /*align-self:end;*/
+                grid-column:3;          /* place the box to the 3rd columns*/
+                grid-row:1/3;           /* place the grid from 1-3*/
+
+            }
+            .box3{
+                /*align-self:center;*/
+                grid-column:2/4;
+                grid-row:3;
+            }
+            .box4{
+                /*align-self:stretch;*/
+                grid-column:1;
+                grid-row:2/4        /* grid boxex over */
+
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="box1">box1</div>
+            <div class="box2">box2</div>
+            <div class="box3">box3</div>
+            <div class="box4">box4</div>
+        </div>
+    </body>
+</html>

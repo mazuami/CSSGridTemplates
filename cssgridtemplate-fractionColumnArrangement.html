@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSS Grid Template - using fraction</title>
+    <style>
+        .wrapper{
+            display:grid;
+            /* generic way of defininig number of columns */
+            /*grid-template-columns: 1fr 1fr 1fr;*/
+            /* using repeat : a shorter way to creat column similar to above*/
+            grid-template-columns:repeat(3,1fr);
+            grid-gap:1em;
+
+            /*defining height of the grid elements*/
+            /*by default it will be 100px and depending on the content size the grid will stretch*/
+            grid-auto-rows:minmax(100px,auto);
+
+        }
+        .wrapper >div:nth-child(odd){
+            background:#aaa;
+
+        }
+        .wrapper>div{
+            background:#bbb;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="wrapper">
+        <div>Lorem ipsum dolor sit.</div>
+        <div>Lorem, ipsum dolor.</div>
+        <div>Lorem ipsum dolor sit amet.</div>
+        <div>Lorem ipsum dolor sit amet consectetur.</div>
+        <div>Lorem, ipsum.</div>
+        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est!</div>
+        <div>Lorem ipsum dolor sit amet consectetur adipisicing.</div>
+        <div>Lorem ipsum dolor sit.</div>
+        <div>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</div>
+        <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam, minus.</div>
+        <div>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi, est officia nemo ad placeat corrupti nulla, quis incidunt error distinctio modi dignissimos nesciunt quidem qui? Velit illum numquam delectus odit.</div>
+
+    </div>
+
+</body>
+</html>
