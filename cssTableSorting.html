@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>CSS Table with sorting</title>
+    <style>
+        body{
+            font-family:Arial, Helvetica, sans-serif;
+        }
+        .wrapper{
+            display:grid;
+            grid-template-columns: 1fr 7fr 1fr;
+            grid-gap:.05em;
+            grid-auto-rows: minmax(100px,auto);
+        }
+        .wrapper>div{
+            background: #f0f0ff;
+            text-align: center;
+        }
+        table{
+            border-spacing: 0px;
+        }
+        table > thead {
+            font-weight: bold;
+            background:#5D6D7E;
+            color:#f0f0ff;
+        }
+        table > thead > tr > th{
+            padding:10px;
+            border:none;
+        }
+        table{
+            margin:0 auto;
+        }
+        table > tbody > tr > td{
+            padding:5px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+
+        }
+        table > tbody > tr:nth-child(even){
+            background-color:#D5D8DC
+        }
+
+        .arrow{
+            border:solid black;
+            border-width: 0 3px 3px 0;
+            display:inline-block;
+            padding:3px;
+
+        }
+        .down{
+            transform:rotate(45deg);
+            -webkit-transform: rotate(45deg);
+        }
+        .up{
+            transform:rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+        }
+        #clickHere{
+            margin-left:240px;
+            margin-right:240px;
+            margin-top:10px;
+            margin-bottom:10px;
+            border: #AEB6BF 1px solid;
+            padding:20px;
+
+        }
+        
+        
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div></div>
+            <div>
+                <div id="clickHere"> Click here !</div>
+            </div>
+            <div></div>
+            <div></div>
+            <div id="paintedBlue"></div>
+            <div></div>
+            <div></div>
+            <div>
+                <h2>Table Template</h2>
+                <div id="tableContent"></div>
+            </div>
+            <div></div>
+        </div>
+    </body>
+    <script>
+        $("#tableContent").empty();
+        var sampleJSONData={
+            "header":["header1","header2","header3","header4","header5"],
+            "data":[
+                {
+                    "name":"testSample1",
+                    "statue":"testSampleStatus1",
+                    "compartment":"testSampleCompartment1",
+                    "parameter":"testSampleParameter1",
+                    "date":"3/20/2021 11:31:25"
+
+                },
+                {
+                    "name":"testSample3",
+                    "statue":"testSampleStatus3",
+                    "compartment":"testSampleCompartment3",
+                    "parameter":"testSampleParameter3",
+                    "date":"3/20/2021 11:55:25"
+
+                },
+                {
+                    "name":"testSample5",
+                    "statue":"testSampleStatus5",
+                    "compartment":"testSampleCompartment5",
+                    "parameter":"testSampleParameter5",
+                    "date":"3/20/2021 12:31:25"
+
+                },
+                {
+                    "name":"testSample4",
+                    "statue":"testSampleStatus4",
+                    "compartment":"testSampleCompartment4",
+                    "parameter":"testSampleParameter4",
+                    "date":"3/20/2021 12:15:25"
+
+                },
+                {
+                    "name":"testSample2",
+                    "statue":"testSampleStatus2",
+                    "compartment":"testSampleCompartment2",
+                    "parameter":"testSampleParameter2",
+                    "date":"3/20/2021 11:45:25"
+
+                },
+            ]
+
+        }
+        var tableHeaderData=sampleJSONData.header;
+        var tableContentData=sampleJSONData.data;
+        // bind the header data
+        var tableHeaderContent="";
+        $.each(tableHeaderData,function(headerIndex,headerValue){
+            if(headerValue==="header5"){
+            tableHeaderContent +='<th data-type="date">'+headerValue+'&nbsp;&nbsp;<span class="sortedIcon"></span></th>';
+            }
+            else{
+            tableHeaderContent +='<th data-type="string">'+headerValue+'&nbsp;&nbsp;<span class="sortedIcon"></span></th>';
+            }
+        });
+        //bind the data content
+        var tablerowcontent="";
+        $.each(tableContentData,function(contentIndex,contentValue){
+            var rowItems=tableContentData[contentIndex];
+            tablerowcontent += '<tr>';
+            var tableDataContent="";
+            // bind column values for each row
+            $.each(rowItems,function(columnIndex,columnValue){
+                tableDataContent += '<td>'+columnValue+'</td>';
+            });
+            tablerowcontent +=tableDataContent +'</tr>';
+        });
+        var sampleTable='<table id="sampleTable"><thead>'+tableHeaderContent+'</thead><tbody>'+tablerowcontent+'</tbody></table>'
+        $("#tableContent").append('<div>'+sampleTable+'</div>');
+
+        // adding click functionality for the header//
+        var header=document.getElementsByTagName('th');
+
+
+        $.each(header,function(indexHeader,valueHeader){
+
+            valueHeader.addEventListener('click',function(){
+
+                console.log('Sort by '+ valueHeader.innerHTML);
+                sortthetable(valueHeader.cellIndex);
+            })
+
+    
+        });
+
+        const _tabledata=document.getElementById('sampleTable');
+        const _tablebody=_tabledata.querySelector('tbody');
+        const _tableRows=_tablebody.querySelectorAll('tr');
+
+        var asc=false;
+        function sortthetable(paramSortedIndex){
+                if(asc){
+                    asc=false;
+                }
+                else{
+                    asc=true;
+                }
+                toggleSort(asc,paramSortedIndex);
+                const temprows=Array.from(_tableRows);
+                temprows.sort(function(rowfirst,rowsecond){
+                    const _cellFirst=rowfirst.querySelectorAll('td')[paramSortedIndex].innerHTML;
+                    const _cellSecond=rowsecond.querySelectorAll('td')[paramSortedIndex].innerHTML;
+
+                    const _first= transformTable(paramSortedIndex,_cellFirst);
+                    const _second= transformTable(paramSortedIndex,_cellSecond);
+                    if(asc){
+                            switch(true){
+                            case _first >_second: return 1;
+                            case _first <_second: return -1;
+                            case _first ===_second: return 0;
+                            }
+                    }
+                    else{
+                        switch(true){
+                            case _first >_second: return -1;
+                            case _first <_second: return 1;
+                            case _first ===_second: return 0;
+                            }
+                        
+                    }
+
+                });
+
+                //Removing all the chile row
+
+                [].forEach.call(_tableRows,function(row){
+                    _tablebody.removeChild(row);
+                });
+
+                //Add the sorted row
+
+                temprows.forEach(function(newtemprow){
+                    _tablebody.appendChild(newtemprow);
+                });
+        }
+
+        //transformation function to sort number string and date
+
+        function transformTable(index,content){
+            const typeHeader=header[index].getAttribute('data-type');
+                switch(typeHeader){
+                    case 'number':
+                        return parseFloat(content);
+                    case 'string':
+                        return content;
+                    case 'date':
+                        {
+                            let dateParts = content.split(" ")[0];
+                            let timeParts = content.split(" ")[1];
+                            let datePartSplitted = dateParts.split("/");
+                            let timePartSplitted = timeParts.split(":");
+                            let month =datePartSplitted[0];
+                            let day=datePartSplitted[1];
+                            let year=datePartSplitted[2];
+                            // month is 0-based, that's why we need dataParts[1] - 1
+                            return dateObject = new Date(year,month -1 , day, timePartSplitted[0], timePartSplitted[1], timePartSplitted[2]);
+
+                        }
+                        
+                }
+        }
+
+        function toggleSort(param,paramSortedIndex){
+            if(param){
+                
+                //remove element//
+
+                $('.sortedIcon').empty();
+                
+                
+                //add element//
+                var sortIcon=document.createElement('i');
+                sortIcon.classList.add('arrow');
+                sortIcon.classList.add('down');                    
+                header[paramSortedIndex].lastElementChild.appendChild(sortIcon);
+                
+            }
+            else{
+                //remove element//
+                $('.sortedIcon').empty();
+
+                
+                //add element//
+                var sortIcon=document.createElement('i');
+                sortIcon.classList.add('arrow');
+                sortIcon.classList.add('up');                    
+                header[paramSortedIndex].lastElementChild.appendChild(sortIcon);
+          }
+        }
+
+        var clickDiv=document.getElementById('clickHere');
+        clickDiv.addEventListener('click',function(){
+
+           var currentDateTime=new Date();
+           var currentTime = currentDateTime.toLocaleTimeString();
+
+           var elementBlue=document.getElementById('paintedBlue');
+           elementBlue.style.backgroundColor='#A3E4D7';
+           elementBlue.style.marginLeft="200";
+           elementBlue.style.marginRight="200";
+           elementBlue.innerHTML="<p>"+currentTime+"</p>";
+            
+        });
+        </script>
+</html>
